@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95b5cf04005ade143a91a072b5b8f8fb, type: 3}
+  m_Name: Hex_SO
+  m_EditorClassIdentifier: 
+  hexColors:
+  - eHexColor: 0
+    material: {fileID: 2100000, guid: 21c97ab0a3f8971418ee0a1001ffbddc, type: 2}
+  - eHexColor: 1
+    material: {fileID: 2100000, guid: cf051fba995609b459f0eb4baf4bb478, type: 2}
+  - eHexColor: 2
+    material: {fileID: 2100000, guid: ab73069d4bed96f44b9e6ae063fced82, type: 2}
+  - eHexColor: 3
+    material: {fileID: 2100000, guid: 0c6067dc8bd52b048865af2395c2a784, type: 2}
+  - eHexColor: 4
+    material: {fileID: 2100000, guid: 6c99324928db7ad4791cfd6f2adfec67, type: 2}
+  - eHexColor: 5
+    material: {fileID: 2100000, guid: 1d8805fdd9ac3d049a5532ae21c3bd84, type: 2}
