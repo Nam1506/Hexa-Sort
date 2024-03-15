@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -106,7 +107,9 @@ public class HexStack : MonoBehaviour
 
     public float GetCurrentOffsetX()
     {
-        return -0.05f * hexStacks.Count;
+        if (hexStacks.Count == 0) return 0;
+
+        return 0.05f * (hexStacks.Count - 1);
     }
 
     public void GenerateHex(FakeData fakeData)
@@ -119,7 +122,7 @@ public class HexStack : MonoBehaviour
 
             var pos = Vector3.zero;
 
-            pos.x = -0.05f * (i);
+            pos.x = 0.05f * (i);
 
             pos.y = -0.2f * (i + 1);
 
@@ -141,14 +144,34 @@ public class HexStack : MonoBehaviour
 
         pos.y = GetCurrentOffsetY();
 
-        hex.transform.localPosition = pos;
+        hex.transform.DOLocalMove(pos, 0.5f);
+
     }
 
     public void AddHex(List<Hex> hexs)
     {
+        StartCoroutine(IEAddHex(hexs));
+    }
+
+    private IEnumerator IEAddHex(List<Hex> hexs)
+    {
         foreach (var hex in hexs)
         {
-            AddHex(hex);
+            hexStacks.Add(hex);
+
+            hex.transform.SetParent(this.transform);
+
+            var pos = Vector3.zero;
+
+            pos.x = GetCurrentOffsetX();
+
+            pos.y = GetCurrentOffsetY();
+
+            hex.transform.DOLocalMove(pos, 0.5f);
+
+            hex.transform.DOLocalRotate(hex.transform.localEulerAngles + new Vector3(180, 0, 180), 0.5f);
+
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
