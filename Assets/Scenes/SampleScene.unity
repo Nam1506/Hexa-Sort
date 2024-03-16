@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.13239828, g: 0.14160195, b: 0.13178626, a: 1}
+  m_IndirectSpecularColor: {r: 0.13224307, g: 0.14137216, b: 0.13144948, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -993,6 +993,6 @@ MonoBehaviour:
   - {fileID: 1424499465}
   - {fileID: 1822337977}
   fakeDatas:
-  - data: 0400000002000000050000000500000005000000
-  - data: 0400000002000000050000000500000005000000
+  - data: 0500000005000000050000000500000005000000
+  - data: 0400000005000000050000000500000005000000
   - data: 0300000002000000030000000400000005000000

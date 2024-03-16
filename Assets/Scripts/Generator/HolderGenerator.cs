@@ -32,6 +32,19 @@ public class HolderGenerator : MonoBehaviour
         }
     }
 
+    public void Regenerate()
+    {
+        foreach (var place in places)
+        {
+            if (place.childCount != 0)
+            {
+                return;
+            }
+        }
+
+        GenerateStackHexa();
+    }
+
 }
 
 

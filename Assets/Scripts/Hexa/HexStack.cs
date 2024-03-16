@@ -1,7 +1,12 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Net;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class HexStack : MonoBehaviour
 {
@@ -44,6 +49,8 @@ public class HexStack : MonoBehaviour
             return;
         }
 
+        curHexSlot?.UnSelect();
+
         if (curHexSlot.IsAvailable())
         {
             curHexSlot.SetHexStack(this);
@@ -54,10 +61,9 @@ public class HexStack : MonoBehaviour
         {
             transform.localPosition = Vector3.zero;
 
-            curHexSlot.UnSelect();
+            curHexSlot = null;
         }
 
-        curHexSlot = null;
     }
 
     public Hex GetTopHex()
@@ -107,9 +113,9 @@ public class HexStack : MonoBehaviour
 
     public float GetCurrentOffsetX()
     {
-        if (hexStacks.Count == 0) return 0;
+        //if (hexStacks.Count == 0) return 0;
 
-        return 0.05f * (hexStacks.Count - 1);
+        return 0.01f * (hexStacks.Count - 1);
     }
 
     public void GenerateHex(FakeData fakeData)
@@ -122,7 +128,7 @@ public class HexStack : MonoBehaviour
 
             var pos = Vector3.zero;
 
-            pos.x = 0.05f * (i);
+            pos.x = 0.02f * (i);
 
             pos.y = -0.2f * (i + 1);
 
@@ -145,33 +151,56 @@ public class HexStack : MonoBehaviour
         pos.y = GetCurrentOffsetY();
 
         hex.transform.DOLocalMove(pos, 0.5f);
-
     }
 
-    public void AddHex(List<Hex> hexs)
+    public void AddHex(List<Hex> hexs, HexStack hexStack)
     {
-        StartCoroutine(IEAddHex(hexs));
+        StartCoroutine(IEAddHex(hexs, hexStack));
     }
 
-    private IEnumerator IEAddHex(List<Hex> hexs)
+    private IEnumerator IEAddHex(List<Hex> hexs, HexStack hexStack)
     {
+        var firstHex = hexs[0];
+
+        var firstPos = Vector3.zero;
+
+        firstPos.x = GetCurrentOffsetX();
+
+        firstPos.y = GetCurrentOffsetY();
+
+        Vector3 midPoint = firstHex.transform.localPosition + (firstPos - firstHex.transform.localPosition) / 2f;
+
+        midPoint.y = Mathf.Max(firstHex.transform.localPosition.y, firstPos.y);
+
+        midPoint.y -= 0.2f * hexs.Count;
+
+        float timeMove = 0.5f;
+
         foreach (var hex in hexs)
         {
             hexStacks.Add(hex);
 
             hex.transform.SetParent(this.transform);
 
-            var pos = Vector3.zero;
+            var targetPos = Vector3.zero;
 
-            pos.x = GetCurrentOffsetX();
+            targetPos.x = GetCurrentOffsetX();
 
-            pos.y = GetCurrentOffsetY();
+            targetPos.y = GetCurrentOffsetY();
 
-            hex.transform.DOLocalMove(pos, 0.5f);
+            //Vector3 dr = (targetPos - hex.transform.localPosition);
 
-            hex.transform.DOLocalRotate(hex.transform.localEulerAngles + new Vector3(180, 0, 180), 0.5f);
+            Vector3 dr = (transform.position - hexStack.transform.position);
 
-            yield return new WaitForSeconds(0.1f);
+            dr.y = midPoint.y;
+
+            Vector3 axis = Vector3.Cross(dr, Vector3.up);
+
+            hex.transform.DOLocalPath(new Vector3[] { hex.transform.localPosition, midPoint, targetPos }, timeMove, PathType.CatmullRom, PathMode.Full3D, 10);
+
+            hex.RotateAround(axis, timeMove);
+
+            yield return new WaitForSeconds(0.03f);
         }
     }
 
@@ -186,6 +215,12 @@ public class HexStack : MonoBehaviour
         {
             RemoveHex(hex);
         }
+
+        if (hexStacks.Count == 0)
+        {
+            curHexSlot.hexStack = null;
+            curHexSlot = null;
+        }
     }
 
     private void CheckRaycast(Hex hex)
@@ -197,13 +232,21 @@ public class HexStack : MonoBehaviour
         {
             var hexSlot = hitInfo.collider.GetComponent<HexSlot>();
 
-            if (hexSlot != curHexSlot)
+            if (hexSlot != curHexSlot || curHexSlot == null)
             {
                 curHexSlot?.UnSelect();
 
                 curHexSlot = hexSlot;
 
                 curHexSlot.Select();
+            }
+        }
+        else
+        {
+            if (curHexSlot != null)
+            {
+                curHexSlot?.UnSelect();
+                curHexSlot = null;
             }
         }
     }

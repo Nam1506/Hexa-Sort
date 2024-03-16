@@ -46,5 +46,7 @@ public class HexSlot : MonoBehaviour
         hexStack.transform.localPosition = Vector3.zero;
 
         GameplayManager.Instance.CheckMergeHex(this);
+
+        HolderGenerator.Instance.Regenerate();
     }
 }

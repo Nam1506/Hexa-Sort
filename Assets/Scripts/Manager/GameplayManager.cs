@@ -46,7 +46,7 @@ public class GameplayManager : MonoBehaviour
 
             if (curTopHexColor == neighborTopHexColor)
             {
-                hexStack.AddHex(neighborHexStack.GetListTopHex());
+                hexStack.AddHex(neighborHexStack.GetListTopHex(),neighborHexStack);
 
                 neighborHexStack.RemoveHex(neighborHexStack.GetListTopHex());
 
